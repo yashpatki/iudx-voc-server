@@ -32,7 +32,7 @@ public class DBVerticle extends AbstractVerticle {
         MongoClient dbClient = MongoClient.createShared(vertx,
                                                         mongoconfig,
                                                         config().getString(CONFIG_DB_POOLNAME));
-        DBService.create(dbClient, ready -> {
+        DBService.create(dbClient, vertx, ready -> {
             if (ready.succeeded()) {
                 ServiceBinder binder = new ServiceBinder(vertx);
                 binder

@@ -156,8 +156,8 @@ public interface DBService {
 
 
     @GenIgnore
-    static DBService create(MongoClient dbClient,  Handler<AsyncResult<DBService>> readyHandler) {
-        return new DBServiceImpl(dbClient, readyHandler);
+    static DBService create(MongoClient dbClient,  Vertx vertx, Handler<AsyncResult<DBService>> readyHandler) {
+        return new DBServiceImpl(dbClient, vertx, readyHandler);
     }
 
     @GenIgnore

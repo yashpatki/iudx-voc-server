@@ -5,6 +5,7 @@
 
 package iudx.vocserver.database;
 
+import io.vertx.core.Vertx;
 import io.vertx.core.AsyncResult;
 import io.vertx.core.Future;
 import io.vertx.core.Handler;
@@ -24,6 +25,9 @@ class DBServiceImpl implements DBService {
      * @param dbClient MongoDB Client
      * @param readyHandler Async query result handler. Returns query results as JSONArray
      */
+
+    private Vertx vertx;
+    private String test;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(DBServiceImpl.class);
     private final MongoClient dbClient;
@@ -64,8 +68,9 @@ class DBServiceImpl implements DBService {
         "{\"$1\": \"$2\"}";
 
 
-    DBServiceImpl(MongoClient dbClient, Handler<AsyncResult<DBService>> readyHandler) {
+    DBServiceImpl(MongoClient dbClient, Vertx vertx, Handler<AsyncResult<DBService>> readyHandler) {
         this.dbClient = dbClient;
+        this.vertx = vertx;
         readyHandler.handle(Future.succeededFuture(this));
     }
 
@@ -102,6 +107,10 @@ class DBServiceImpl implements DBService {
      */
     @Override
     public DBService getMasterContext(Handler<AsyncResult<JsonObject>> resultHandler) {
+        test = "hello";
+        vertx.setTimer(2000, id -> {
+          LOGGER.info("from getMasterContext " + test);
+        });
         dbClient.findWithOptions("master",
                 new JsonObject(),
                 new FindOptions().setFields(new JsonObject().put("_id", false)
@@ -125,6 +134,7 @@ class DBServiceImpl implements DBService {
      */
     @Override
     public DBService getAllClasses(Handler<AsyncResult<JsonArray>> resultHandler) {
+        test = "";
         dbClient.findWithOptions("summary",
                 new JsonObject(QUERY_FIND_ALL_CLASSES),
                 new FindOptions().setFields(new JsonObject().put("_id", false)
@@ -137,6 +147,7 @@ class DBServiceImpl implements DBService {
                 resultHandler.handle(Future.failedFuture(res.cause()));
             }
         });
+        LOGGER.info("from getclasses " + test);
         return this;
     }
 
