@@ -86,8 +86,8 @@ services:
     image: getmeili/meilisearch
     networks: 
       - voc-net
-    expose:
-      - "7700"
+    ports:
+      - "7700:7700"
     logging:
          driver: "json-file"
          options:

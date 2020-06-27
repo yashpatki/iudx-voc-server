@@ -86,7 +86,7 @@ public class HttpServerVerticle extends AbstractVerticle {
         HttpServerOptions options = new HttpServerOptions()
                                     .setCompressionSupported(true)
                                     .setCompressionLevel(5)
-                                    .setSsl(true)
+                                    .setSsl(false)
                                     .setKeyStoreOptions(new JksOptions()
                                         .setPath(config().getString(JKS_FILE))
                                         .setPassword(config().getString(JKS_PASSWD)));
@@ -197,6 +197,7 @@ public class HttpServerVerticle extends AbstractVerticle {
         router.get("/fuzzysearch").consumes("application/json")
             .produces("application/json")
             .handler( routingContext -> {
+              LOGGER.info("Reached fuzzy");
                 vocApis.fuzzySearchHandler(routingContext);
         });
 

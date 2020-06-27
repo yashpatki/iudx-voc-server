@@ -229,6 +229,7 @@ public final class VocApis implements VocApisInterface {
     // tag::external-service-calls[]
     public void fuzzySearchHandler(RoutingContext context) {
         String pattern = "";
+        LOGGER.info("pattern is " + context.queryParams().get("q"));
         try {
             if (context.queryParams().contains("q")) {
                 pattern = context.queryParams().get("q");
@@ -242,8 +243,9 @@ public final class VocApis implements VocApisInterface {
             return;
         }
 
+        LOGGER.info("pattern is " + pattern);
         searchClient
-        .get(7700, "search", "/indexes/summary/search") 
+        .get(7700, "localhost", "/indexes/summary/search") 
         .addQueryParam("q", pattern)
         .putHeader("Accept", "application/json").send(ar -> {
           if (ar.succeeded()) {
